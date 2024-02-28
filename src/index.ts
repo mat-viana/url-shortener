@@ -1,29 +1,26 @@
-import express, { type Request, type Response } from 'express'
-import shortid from 'shortid'
+import express from 'express'
+import dotenv from 'dotenv'
 
-const app = express()
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+import { setupDatabase } from './database/database'
+import { createShortUrl, getUrlRank, urlResolver } from './services/shortener'
 
+dotenv.config()
+bootstrap()
 
-app.get('/', function(req: Request, res: Response) {
-  res.json({
-    id: 444,
-    url: 'http://google.com'
-  });
-});
+const port = process.env.PORT ?? 3000
 
-app.post('/', function(req: Request, res: Response) {
-  const originalUrl = req.query.url;
+async function bootstrap () {
+  await setupDatabase()
 
+  const app = express()
+  app.use(express.json())
+  app.use(express.urlencoded({ extended: true }))
 
-  res.json({
-    id: 1,
-    originalUrl: originalUrl,
-    shortUrl: shortid.generate()
+  app.post('/short', createShortUrl)
+  app.get('/rank', getUrlRank)
+  app.get('/r/:url', urlResolver)
+
+  app.listen(port, () => {
+    console.log('Server running on http://localhost:3000')
   })
-});
-
-app.listen(3000, () => {
-  console.log(`Server running on http://localhost:3000`)
-})
+}
