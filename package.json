@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
     "migrate": "sqlite-migrate ./src/database/migrations ./src/database/url-shortner.db",
     "test": "echo \"Error: no test specified\" && exit 1"
