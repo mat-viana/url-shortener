@@ -1,17 +1,17 @@
-import sqlite3 from 'sqlite3';
-import { open, Database } from 'sqlite';
+import sqlite3 from 'sqlite3'
+import { open, type Database } from 'sqlite'
 
 sqlite3.verbose()
 
-let database: Database | null = null;
+let database: Database | null = null
 
-export async function setupDatabase(): Promise<Database> {
+export async function setupDatabase (): Promise<Database> {
   try {
     if (!database) {
       database = await open({
         filename: './src/database/url-shortener.db',
-        driver: sqlite3.Database,
-      });
+        driver: sqlite3.Database
+      })
 
       await database.exec(`
         DROP TABLE urls;
@@ -22,25 +22,25 @@ export async function setupDatabase(): Promise<Database> {
           short_url_key TEXT NOT NULL UNIQUE,
           total_access INTEGER DEFAULT 0
         );
-      `);
+      `)
 
-      console.log('Database setup successful.');
+      console.log('Database setup successful.')
     }
 
     if (!database) {
-      throw new Error('Database instance is null after setup.');
+      throw new Error('Database instance is null after setup.')
     }
 
-    return database;
+    return database
   } catch (error) {
-    console.error('Error setting up database:', error);
-    throw error;
+    console.error('Error setting up database:', error)
+    throw error
   }
 }
 
-export function getDatabase(): Database {
+export function getDatabase (): Database {
   if (!database) {
-    throw new Error('Database instance is not initialized.');
+    throw new Error('Database instance is not initialized.')
   }
-  return database;
+  return database
 }
