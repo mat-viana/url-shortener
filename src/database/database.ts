@@ -7,7 +7,7 @@ let database: Database | null = null
 
 export async function setupDatabase (): Promise<Database> {
   try {
-    if (!database) {
+    if (database === null) {
       database = await open({
         filename: './src/database/url-shortener.db',
         driver: sqlite3.Database
@@ -27,7 +27,7 @@ export async function setupDatabase (): Promise<Database> {
       console.log('Database setup successful.')
     }
 
-    if (!database) {
+    if (database === null) {
       throw new Error('Database instance is null after setup.')
     }
 
@@ -39,7 +39,7 @@ export async function setupDatabase (): Promise<Database> {
 }
 
 export function getDatabase (): Database {
-  if (!database) {
+  if (database === null) {
     throw new Error('Database instance is not initialized.')
   }
   return database
