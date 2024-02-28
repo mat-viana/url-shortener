@@ -14,7 +14,7 @@ export async function setupDatabase (): Promise<Database> {
       })
 
       await database.exec(`
-        DROP TABLE urls;
+        DROP TABLE IF EXISTS urls;
         CREATE TABLE urls (
           id TEXT PRIMARY KEY,
           original_url TEXT NOT NULL,
